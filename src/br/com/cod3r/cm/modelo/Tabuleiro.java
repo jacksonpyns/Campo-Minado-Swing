@@ -2,17 +2,18 @@ package br.com.cod3r.cm.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import br.com.cod3r.cm.excecao.ExplosaoException;
-
-public class Tabuleiro {
+public class Tabuleiro implements CampoObservador {
 
 	private int linhas;
 	private int colunas;
 	private int minas;
 	
 	private final List<Campo> campos = new ArrayList<Campo>();
+	private final List<Consumer<ResultadoEvento>> observadores = 
+			new ArrayList<>();
 	
 	public Tabuleiro(int linhas, int colunas, int minas) {
 		this.linhas = linhas;
@@ -25,17 +26,21 @@ public class Tabuleiro {
 		sortearMinas(); // sempre que reiniciar o jogo esse será chamado
 	}
 	
+	public void registrarObservador(Consumer <ResultadoEvento> observador) {
+		observadores.add(observador);
+	}
+	
+	private void notificarObservadores(boolean resultado) {
+		observadores.stream() // Para cada um dos observadores vou passar o método accept
+			.forEach(o -> o.accept(new ResultadoEvento(resultado)));
+	}
+	
 	// Para detectar quando houver alguma explosào
 	public void abrir(int linha, int coluna) {
-		try {
-			campos.parallelStream()
-				.filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
-				.findFirst()
-				.ifPresent(c -> c.abrir());;
-		} catch (ExplosaoException e) {
-			campos.forEach(c -> c.setAberto(true));
-			throw e;
-		}
+		campos.parallelStream()
+			.filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
+			.findFirst()
+			.ifPresent(c -> c.abrir());;
 	}
 	
 	public void alternarMarcacao(int linha, int coluna) {
@@ -48,8 +53,10 @@ public class Tabuleiro {
 	// Ele pega todas as linhas e colunas e cria os campos e joga na lista
 	private void gerarCampo() {
 		for (int linha = 0; linha < linhas; linha++) {
-			for (int campo = 0; campo < colunas; campo++) {
-				campos.add(new Campo(linha, campo));
+			for (int coluna = 0; coluna < colunas; coluna++) {
+				Campo campo = new Campo(linha, coluna);
+				campo.registrarObservador(this);
+				campos.add(campo);
 			}
 		}
 	}
@@ -84,36 +91,18 @@ public class Tabuleiro {
 		sortearMinas();
 	}
 	
-	/*
-	 *  Quando tiver uma quantidade muito grande de concatenação,
-	 * onde precisa montar uma String a partir de muitas partes
-	 * o StringBuilder é boa para isso.
-	 */
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("  ");
-		for (int c = 0; c < colunas; c++) {
-			sb.append(" ");
-			sb.append(c);
-			sb.append(" ");
+	@Override
+	public void eventoOcorreu(Campo campo, CampoEvento evento) {
+		if (evento == CampoEvento.EXPLODIR) {
+			mostrarMinas();
+			notificarObservadores(false);
+		} else if (objetivoAlcancado()){
+			notificarObservadores(true);
 		}
-		
-		sb.append("\n");
-		
-		int i = 0;
-		for (int l = 0; l < linhas; l++) {
-			sb.append(l);
-			sb.append(" ");
-			for (int c = 0; c < colunas; c++) {
-				sb.append(" ");
-				sb.append(campos.get(i));
-				sb.append(" ");
-				i++;
-			}
-			sb.append("\n");
-		}
-		
-		return sb.toString();
+	}
+	private void mostrarMinas() {
+		campos.stream()
+			.filter(c -> c.isMinado())
+			.forEach(c -> c.setAberto(true));
 	}
 }

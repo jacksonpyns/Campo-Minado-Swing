@@ -3,8 +3,6 @@ package br.com.cod3r.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.cod3r.cm.excecao.ExplosaoException;
-
 public class Campo {
 
 	private final int linha;
@@ -15,10 +13,20 @@ public class Campo {
 	private boolean marcado = false;
 	
 	private List<Campo> vizinhos = new ArrayList<Campo>();
+	private List<CampoObservador> observadores = new ArrayList<>();
 	
 	public Campo(int linha, int coluna){
 		this.linha = linha;
 		this.coluna = coluna;
+	}
+	
+	public void registrarObservador(CampoObservador obsevador) {
+		observadores.add(obsevador);
+	}
+	
+	private void notificarObservadores(CampoEvento evento) {
+		observadores.stream()
+			.forEach(o -> o.eventoOcorreu(this, evento));
 	}
 	
 	public boolean adicionarVizinho(Campo vizinho) {
@@ -44,16 +52,26 @@ public class Campo {
 	public void alternarMarcacao() {
 		if (!aberto) {
 			marcado = !marcado;
+			
+			if (marcado) {
+				notificarObservadores(CampoEvento.MARCAR);
+			} else {
+				notificarObservadores(CampoEvento.DESMARCAR);
+			}
 		}
 	}
 	
 	public boolean abrir() {
 		if (!aberto && !marcado) {
-			aberto = true;
-			
+			// FIXME significa um erro que precisa ser corrigido
 			if (minado) {
-				throw new ExplosaoException();
+				// TODO significa que vai implementar algo no código depois
+				notificarObservadores(CampoEvento.EXPLODIR);
+				return true;
 			}
+			setAberto(true);
+			notificarObservadores(CampoEvento.ABRIR);
+			
 			if (vizinhancaSegura()) {
 				vizinhos.forEach(v -> v.abrir());
 			}
@@ -84,6 +102,10 @@ public class Campo {
 	
 	void setAberto(boolean aberto) {
 		this.aberto = aberto;
+		
+		if (aberto) {
+			notificarObservadores(CampoEvento.ABRIR);
+		}
 	}
 
 	public boolean isAberto() {
@@ -119,18 +141,5 @@ public class Campo {
 		marcado = false;
 	}
 	
-	public String toString() {
-		if (marcado) {
-			return "x";
-		} else if (aberto && minado) {
-			return "*";
-		} else if (aberto && minasNaVizinhanca() > 0) {
-			return Long.toString(minasNaVizinhanca());
-		} else if (aberto) {
-			return " ";
-		} else {
-			return "?";
-		}
-	}
 	
 }
