@@ -7,9 +7,9 @@ import java.util.function.Predicate;
 
 public class Tabuleiro implements CampoObservador {
 
-	private int linhas;
-	private int colunas;
-	private int minas;
+	private final int linhas;
+	private final int colunas;
+	private final int minas;
 	
 	private final List<Campo> campos = new ArrayList<Campo>();
 	private final List<Consumer<ResultadoEvento>> observadores = 
@@ -24,6 +24,10 @@ public class Tabuleiro implements CampoObservador {
 		gerarCampo();
 		associarVizinhos();
 		sortearMinas(); // sempre que reiniciar o jogo esse será chamado
+	}
+	
+	public void paraCadaCampo(Consumer<Campo> funcao) {
+		campos.forEach(funcao);
 	}
 	
 	public void registrarObservador(Consumer <ResultadoEvento> observador) {
@@ -91,6 +95,14 @@ public class Tabuleiro implements CampoObservador {
 		sortearMinas();
 	}
 	
+	public int getLinhas() {
+		return linhas;
+	}
+
+	public int getColunas() {
+		return colunas;
+	}
+
 	@Override
 	public void eventoOcorreu(Campo campo, CampoEvento evento) {
 		if (evento == CampoEvento.EXPLODIR) {
