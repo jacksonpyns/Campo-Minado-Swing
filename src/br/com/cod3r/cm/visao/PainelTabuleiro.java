@@ -2,7 +2,9 @@ package br.com.cod3r.cm.visao;
 
 import java.awt.GridLayout;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import br.com.cod3r.cm.modelo.Tabuleiro;
 
@@ -27,9 +29,17 @@ public class PainelTabuleiro extends JPanel {
 		// Aqui ele cria os botões do jogo, tem como criar por forEach também
 		
 		tabuleiro.registrarObservador(e -> {
-			// TODO mostrar resultado pro usuário
 			
-			tabuleiro.reiniciar();
+			// Para deixar o "X" que tem que mostrar em primeiro
+			SwingUtilities.invokeLater(() -> {
+				if (e.isGanhou()) {
+					JOptionPane.showMessageDialog(this, "Ganhou :)");
+				} else {
+					JOptionPane.showMessageDialog(this, "Perdeu :(");
+				}
+				
+				tabuleiro.reiniciar();
+			});
 		});
 	}
 }
