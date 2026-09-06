@@ -81,7 +81,7 @@ public class Campo {
 		}
 	}
 	
-	boolean vizinhancaSegura() {
+	public boolean vizinhancaSegura() {
 		return vizinhos.stream().noneMatch(v -> v.minado);
 	}
 	
@@ -131,8 +131,8 @@ public class Campo {
 	}
 	
 	// Para saber a quantidade de minas que tenho na vizinhança
-	long minasNaVizinhanca() {
-		return vizinhos.stream().filter(v -> v.minado).count();
+	public int minasNaVizinhanca() {
+		return (int) vizinhos.stream().filter(v -> v.minado).count();
 	} 
 	
 	void reiniciar() {
