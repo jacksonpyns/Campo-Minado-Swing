@@ -1,47 +1,54 @@
 # 💣 Campo Minado — Java Swing
 
-Uma evolução do primeiro projeto **Campo Minado**, agora com uma **interface gráfica desenvolvida utilizando Java Swing**.
+Uma versão aprimorada do clássico **Campo Minado**, desenvolvida em **Java** utilizando **Swing** para criação da interface gráfica.
 
-O projeto transforma a lógica do jogo em uma aplicação desktop interativa, permitindo ao usuário jogar diretamente através da interface gráfica.
+O projeto foi desenvolvido **acompanhando as aulas juntamente com o professor do curso Cod3r**, colocando em prática os conceitos apresentados durante o desenvolvimento.
 
 ## 🚀 Tecnologias
 
 * ☕ Java
 * 🖥️ Java Swing
-* 🧠 Programação Orientada a Objetos
+* 🧩 Programação Orientada a Objetos
 * 🔧 Git & GitHub
 * 💻 Eclipse
 
-## 🎮 Funcionalidades
+## 🎮 Sobre o projeto
 
-* 💣 Tabuleiro de Campo Minado
-* 🖱️ Interação através da interface gráfica
-* 🚩 Marcação de campos
+O jogo conta com uma interface gráfica para interação com o jogador, permitindo:
+
+* 💣 Campo com minas
 * 🔢 Identificação de minas próximas
-* 💥 Detecção de minas
-* 🏆 Sistema de vitória e derrota
+* 🚩 Marcação de campos
+* 🖱️ Interação através da interface
+* 🏆 Condições de vitória
+* 💥 Detecção de minas e derrota
 * 🔄 Reinício da partida
 
-## 🧠 Conceitos aplicados
+## 🧠 Conceitos praticados
 
 * Programação Orientada a Objetos
 * Classes e objetos
 * Encapsulamento
-* Eventos e interação com interface gráfica
-* Organização de código
+* Eventos e componentes Swing
+* Manipulação de interfaces gráficas
+* Estruturas de dados
 * Lógica de programação
 
-## 🎯 Objetivo
+## 📚 Desenvolvimento
 
-Praticar **Java e Programação Orientada a Objetos**, evoluindo uma aplicação de console para uma experiência gráfica utilizando **Swing**.
+Este projeto foi desenvolvido **seguindo as aulas**, utilizando cada etapa para compreender e aplicar os conceitos de Java e Swing na construção de uma aplicação funcional.
 
-> **Da lógica no console para uma aplicação gráfica em Java. ☕💣**
+Foi uma evolução do primeiro projeto de Campo Minado, adicionando uma **interface gráfica e uma experiência mais interativa**.
 
 ## 👨‍💻 Autor
 
 **Jackson**
 
-Estudante de Análise e Desenvolvimento de Sistemas, com foco em desenvolvimento de software.
+Estudante de **Análise e Desenvolvimento de Sistemas**, com foco em desenvolvimento de software e estudos em **Java, Python e tecnologias relacionadas**.
 
 🔗 [GitHub](https://github.com/jacksonpyns)
 🔗 [LinkedIn](https://www.linkedin.com/in/jacksonpy/)
+
+---
+
+⭐ **Java + Swing + POO + prática = evolução constante.**
